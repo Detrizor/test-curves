@@ -1,17 +1,19 @@
 #include "api.h"
+#include <ctime>
 
 CAPI::CAPI()
 {
-	hCurves = LoadLibrary(L"curves.dll");
-	pCreate = (hCurves) ? (Curve_Create*)GetProcAddress(hCurves, "CreateCurve") : NULL;
+	m_hCurves = LoadLibrary(L"curves.dll");
+	m_pCreate = (m_hCurves) ? (CurveCreate*)GetProcAddress(m_hCurves, "CreateCurve") : NULL;
+	std::srand(std::time(NULL));
 }
 
 CAPI::~CAPI()
 {
-	FreeLibrary(hCurves);
+	FreeLibrary(m_hCurves);
 }
 
-std::unique_ptr<DLL_Pure> CAPI::CreateCurve(eCurveType type)
+Curve CAPI::CreateCurve() const
 {
-	return std::unique_ptr<DLL_Pure>(pCreate(type));
+	return std::unique_ptr<DLL_Pure>(m_pCreate());
 }

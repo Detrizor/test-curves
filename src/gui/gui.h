@@ -2,16 +2,23 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_gui.h"
-#include "api.h"
+#include <qmessagebox>
+#include "qtvmodel.h"
 
 class gui : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    gui(QWidget *parent = nullptr);
+    gui();
 
 private:
     Ui::guiClass ui;
-    std::unique_ptr<CAPI> pApi;
+    CAPI api;
+    Curves curves;
+    QMessageBox error_mb;
+    QTVModel model;
+
+private slots:
+    void populate();
 };

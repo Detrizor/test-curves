@@ -1,8 +1,17 @@
 #pragma once
+#include "..\gui\api.h"
 
-enum eCurveType
+class CCircle : public DLL_Pure
 {
-	eCircle,
-	eEllipse,
-	eHelix
+	LPCSTR Type() const override { return "Circle"; }
+};
+
+class CEllipse : public DLL_Pure
+{
+	LPCSTR Type() const override { return "Ellipse"; }
+};
+
+class CHelix : public DLL_Pure
+{
+	LPCSTR Type() const override { return "Helix"; }
 };

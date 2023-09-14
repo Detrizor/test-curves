@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcxproj", "{D5AEB893-00DE-4589-896D-DA22AE456C45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B793553A-FAD5-4B15-B8FD-A2980E370881} = {B793553A-FAD5-4B15-B8FD-A2980E370881}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "curves", "curves\curves.vcxproj", "{B793553A-FAD5-4B15-B8FD-A2980E370881}"
 EndProject

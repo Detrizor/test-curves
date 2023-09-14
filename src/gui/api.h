@@ -1,20 +1,20 @@
 #pragma once
 #include <Windows.h>
 #include <memory>
-
-enum eCurveType;
+#include <vector>
 
 // Abstract 'Pure' class for DLL interface
 class __declspec(dllexport) DLL_Pure
 {
 public:
-    DLL_Pure(eCurveType t) { type = t; }
-
-private:
-    eCurveType type;
+    virtual ~DLL_Pure() {}
+    virtual LPCSTR Type() const = 0;
 };
 
-extern "C" typedef __declspec(dllimport) DLL_Pure* __cdecl Curve_Create(eCurveType t);
+extern "C" typedef __declspec(dllimport) DLL_Pure* __cdecl CurveCreate();
+
+typedef std::unique_ptr<DLL_Pure> Curve;
+typedef std::vector<Curve> Curves;
 
 class __declspec(dllexport) CAPI
 {
@@ -23,10 +23,10 @@ public:
     ~CAPI();
 
 private:
-    HMODULE hCurves;
-    Curve_Create* pCreate;
+    HMODULE m_hCurves;
+    CurveCreate* m_pCreate;
 
 public:
-    bool Loaded() { return !!pCreate; }
-    std::unique_ptr<DLL_Pure> CreateCurve(eCurveType type);
+    bool Loaded() const { return !!m_pCreate; }
+    Curve CreateCurve() const;
 };

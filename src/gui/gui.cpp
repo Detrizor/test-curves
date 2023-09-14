@@ -1,7 +1,30 @@
 #include "gui.h"
 
-gui::gui(QWidget *parent) : QMainWindow(parent)
+gui::gui() : error_mb(this), model(curves)
 {
     ui.setupUi(this);
-    pApi = std::make_unique<CAPI>();
+    error_mb.setText("Failed to load curves.dll!");
+    ui.tvObjects->setModel(&model);
+}
+
+void gui::populate()
+{
+    if (!api.Loaded())
+    {
+        error_mb.show();
+        return;
+    }
+
+    if (curves.size())
+    {
+        curves.clear();
+        model.reset();
+    }
+
+    if (unsigned cnt = ui.edtObjectsNum->text().toInt())
+    {
+        for (unsigned i = 0; i < cnt; i++)
+            curves.push_back(api.CreateCurve());
+        model.update(cnt);
+    }
 }
