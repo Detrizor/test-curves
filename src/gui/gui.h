@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_gui.h"
+#include "api.h"
 
 class gui : public QMainWindow
 {
@@ -9,8 +10,8 @@ class gui : public QMainWindow
 
 public:
     gui(QWidget *parent = nullptr);
-    ~gui();
 
 private:
     Ui::guiClass ui;
+    std::unique_ptr<CAPI> pApi;
 };
