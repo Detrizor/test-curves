@@ -9,10 +9,11 @@ private:
     typedef QAbstractListModel inherited;
 
 public:
-    QTVModel(const Curves& _curves) : curves(_curves) {}
+    QTVModel(const Curves& _curves) : curves(_curves) { param = 0.f; }
 
 private:
     const Curves& curves;
+    float param;
 
 public:
     int rowCount(const QModelIndex&) const override;
@@ -21,5 +22,5 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void reset();
-    void update(unsigned count);
+    void update(unsigned count, float p);
 };

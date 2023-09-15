@@ -19,6 +19,9 @@ private:
     QMessageBox error_mb;
     QTVModel model;
 
+    float Param() const;
+
 private slots:
     void populate();
+    void calculate();
 };
