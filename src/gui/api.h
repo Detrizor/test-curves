@@ -20,6 +20,7 @@ extern "C" typedef __declspec(dllimport) DLL_Pure* __cdecl CurveCreate();
 
 typedef std::unique_ptr<DLL_Pure> Curve;
 typedef std::vector<Curve> Curves;
+typedef std::vector<const DLL_Pure*> CurvesData;
 
 class __declspec(dllexport) CAPI
 {

@@ -1,14 +1,21 @@
 #include "qtvmodel.h"
 
-int QTVModel::rowCount(const QModelIndex&) const
+void QTVModelBase::reset()
 {
-    return curves.size();
+    beginResetModel();
+    endResetModel();
 }
 
-int QTVModel::columnCount(const QModelIndex&) const
+void QTVModelBase::update(unsigned count)
 {
-    return 5;
+    if (count)
+    {
+        beginInsertRows(QModelIndex(), 0, count - 1);
+        endInsertRows();
+    }
 }
+
+////////////////////////////////////////////////////////////////////////////////////
 
 QVariant QTVModel::data(const QModelIndex& index, int role) const
 {
@@ -17,21 +24,21 @@ QVariant QTVModel::data(const QModelIndex& index, int role) const
         switch (index.column())
         {
         case 0:
-            return curves[index.row()]->Type();
+            return container[index.row()]->Type();
         case 1:
-            return curves[index.row()]->R1();
+            return container[index.row()]->R1();
         case 2:
-            if (curves[index.row()]->R2() > 0.f)
-                return curves[index.row()]->R2();
+            if (container[index.row()]->R2() > 0.f)
+                return container[index.row()]->R2();
             break;
         case 3:
         {
-            Fvector ct = curves[index.row()]->C_t(param);
+            Fvector ct = container[index.row()]->C_t(param);
             return QString::asprintf("(%.7f,%.7f,%.7f)", ct.x, ct.y, ct.z);
         }
         case 4:
         {
-            Fvector dct = curves[index.row()]->dC_t(param);
+            Fvector dct = container[index.row()]->dC_t(param);
             return QString::asprintf("{%.7f,%.7f,%.7f}", dct.x, dct.y, dct.z);
         }
         }
@@ -62,18 +69,24 @@ QVariant QTVModel::headerData(int section, Qt::Orientation orientation, int role
     return inherited::headerData(section, orientation, role);
 }
 
-void QTVModel::reset()
-{
-    beginResetModel();
-    endResetModel();
-}
-
 void QTVModel::update(unsigned count, float p)
 {
     param = p;
-    if (count)
-    {
-        beginInsertRows(QModelIndex(), 0, count - 1);
-        endInsertRows();
-    }
+    inherited::update(count);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
+QVariant QTVModelSecond::data(const QModelIndex& index, int role) const
+{
+    if (role == Qt::DisplayRole && index.column() == 0)
+        return container[index.row()]->R1();
+    return QVariant();
+}
+
+QVariant QTVModelSecond::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal && section == 0)
+        return QString("Radius");
+    return inherited::headerData(section, orientation, role);
 }
