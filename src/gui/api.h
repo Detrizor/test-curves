@@ -1,4 +1,5 @@
 #pragma once
+#include "_vector3d.h"
 #include <Windows.h>
 #include <memory>
 #include <vector>
@@ -9,6 +10,10 @@ class __declspec(dllexport) DLL_Pure
 public:
     virtual ~DLL_Pure() {}
     virtual LPCSTR Type() const = 0;
+    virtual float R1() const = 0;
+    virtual float R2() const = 0;
+    virtual Fvector C_t(float t) const = 0;
+    virtual Fvector dC_t(float t) const = 0;
 };
 
 extern "C" typedef __declspec(dllimport) DLL_Pure* __cdecl CurveCreate();

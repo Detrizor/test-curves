@@ -54,5 +54,8 @@
     <ClInclude Include="qtvmodel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="_vector3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
