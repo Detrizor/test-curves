@@ -89,6 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="compute_object.cpp" />
     <ClCompile Include="qtvmodel.cpp" />
     <QtRcc Include="gui.qrc" />
     <QtUic Include="gui.ui" />
@@ -99,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="api.h" />
+    <QtMoc Include="compute_object.h" />
     <ClInclude Include="qtvmodel.h" />
     <ClInclude Include="_vector3d.h" />
   </ItemGroup>

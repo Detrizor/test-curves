@@ -1,11 +1,9 @@
 #include "api.h"
-#include <ctime>
 
 CAPI::CAPI()
 {
 	m_hCurves = LoadLibrary(L"curves.dll");
 	m_pCreate = (m_hCurves) ? (CurveCreate*)GetProcAddress(m_hCurves, "CreateCurve") : NULL;
-	std::srand(std::time(NULL));
 }
 
 CAPI::~CAPI()

@@ -88,10 +88,44 @@ void gui::ResetSecondContainer()
     ui.edtSum->setText("");
 }
 
+void gui::SetupThreads()
+{
+    for (int i = 0, threads = std::thread::hardware_concurrency(); i < threads; i++)
+    {
+        m_vThreads.push_back(std::make_unique<QThread>());
+        m_vComputeObjects.push_back(std::make_unique<CComputeObject>());
+        connect(m_vThreads.back().get(), &QThread::started, m_vComputeObjects.back().get(), &CComputeObject::Start);
+        connect(m_vComputeObjects.back().get(), &CComputeObject::Finished, m_vThreads.back().get(), &QThread::terminate);
+        connect(m_vComputeObjects.back().get(), &CComputeObject::Finished, this, &gui::UpdateComputeResult);
+        m_vComputeObjects.back()->SetThreadNum(i);
+        m_vComputeObjects.back()->moveToThread(m_vThreads.back().get());
+    }
+    CComputeObject::SetGui(this);
+}
+
 void gui::ComputeSecondContainer()
 {
-    float sum = 0.f;
-    for (const auto& I : m_vSecondContainer)
-        sum += I->R1();
-    ui.edtSum->setText(QString::asprintf("%.1f", sum));
+    m_fSecondContainerSum = 0.;
+    if (m_vThreads.empty())
+        SetupThreads();
+
+    for (auto& T : m_vThreads)
+        T->start();
+}
+
+void gui::UpdateComputeResult()
+{
+    ui.edtSum->setText(QString::asprintf("%.1f", m_fSecondContainerSum));
+}
+
+void gui::SetupComputeInterval(CurvesData::iterator& begin, CurvesData::iterator& end, int thread_num)
+{
+    float threads_count = (float)m_vThreads.size();
+    begin = m_vSecondContainer.begin() + (int)floor(float(m_vSecondContainer.size() * thread_num) / threads_count);
+    end = m_vSecondContainer.begin() + (int)floor(float(m_vSecondContainer.size() * ++thread_num) / threads_count);
+}
+
+void gui::AddSecondContainerSum(double val)
+{
+    m_fSecondContainerSum += val;
 }

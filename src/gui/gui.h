@@ -4,6 +4,8 @@
 #include "ui_gui.h"
 #include <qmessagebox>
 #include "qtvmodel.h"
+#include "compute_object.h"
+#include "qthread.h"
 
 class gui : public QMainWindow
 {
@@ -20,9 +22,17 @@ private:
     QMessageBox error_mb;
     QTVModel model;
     QTVModelSecond m_ModelSecond;
+    std::vector<std::unique_ptr<QThread>> m_vThreads;
+    std::vector<std::unique_ptr<CComputeObject>> m_vComputeObjects;
+    double m_fSecondContainerSum;
 
     float Param() const;
     void ResetSecondContainer();
+    void SetupThreads();
+
+public:
+    void SetupComputeInterval(CurvesData::iterator& begin, CurvesData::iterator& end, int thread_num);
+    void AddSecondContainerSum(double val);
 
 private slots:
     void populate();
@@ -30,4 +40,5 @@ private slots:
     void PopulateSecondContainer();
     void SortSecondContainer();
     void ComputeSecondContainer();
+    void UpdateComputeResult();
 };
